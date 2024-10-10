@@ -1,0 +1,47 @@
+-- Create Users Table
+CREATE TABLE Users (
+    user_id INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create Categories Table
+CREATE TABLE Categories (
+    category_id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50) UNIQUE NOT NULL
+);
+
+-- Create Tasks Table
+CREATE TABLE Tasks (
+    task_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT,
+    title VARCHAR(100) NOT NULL,
+    description TEXT,
+    due_date DATE,
+    status ENUM('Pending', 'In Progress', 'Completed') DEFAULT 'Pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id)
+);
+
+-- Create Task_Categories Table
+CREATE TABLE Task_Categories (
+    task_category_id INT PRIMARY KEY AUTO_INCREMENT,
+    task_id INT,
+    category_id INT,
+    FOREIGN KEY (task_id) REFERENCES Tasks(task_id),
+    FOREIGN KEY (category_id) REFERENCES Categories(category_id)
+);
+
+-- Create Task_Comments Table
+CREATE TABLE Task_Comments (
+    comment_id INT PRIMARY KEY AUTO_INCREMENT,
+    task_id INT,
+    user_id INT,
+    comment_text TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (task_id) REFERENCES Tasks(task_id),
+    FOREIGN KEY (user_id) REFERENCES Users(user_id)
+);
